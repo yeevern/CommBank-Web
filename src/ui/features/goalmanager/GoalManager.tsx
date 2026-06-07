@@ -14,6 +14,8 @@ import { Theme } from '../../components/Theme'
 import EmojiPicker from '../../components/EmojiPicker'
 import { BaseEmoji } from 'emoji-mart'
 import GoalIcon from './GoalIcon'
+import { TransparentButton } from '../../components/TransparentButton'
+import { faSmile } from '@fortawesome/free-regular-svg-icons'
 
 type Props = { goal: Goal }
 
@@ -106,6 +108,8 @@ export function GoalManager(props: Props) {
       targetAmount: targetAmount ?? props.goal.targetAmount,
     }
     dispatch(updateGoalRedux(updatedGoal))  // update Redux store
+    
+    updateGoalApi(props.goal.id, updatedGoal)  // persist change to backend
   }
 
   return (
@@ -147,6 +151,13 @@ export function GoalManager(props: Props) {
       >
         <EmojiPicker onClick={pickEmojiOnClick} />
       </EmojiPickerContainer>
+    
+      <AddIconButtonContainer shouldShow={hasIcon()}>
+        <TransparentButton onClick={addIconOnClick}>
+          <FontAwesomeIcon icon={faSmile} size="2x" />
+          <AddIconButtonText>Add icon</AddIconButtonText>
+        </TransparentButton>
+      </AddIconButtonContainer>
 
       <GoalIconContainer shouldShow={hasIcon()}>
         <GoalIcon icon={goal.icon} onClick={addIconOnClick} />
@@ -237,4 +248,14 @@ const EmojiPickerContainer = styled.div<EmojiPickerContainerProps>`
 
 const GoalIconContainer = styled.div<GoalIconContainerProps>`
   display: ${(props) => (props.shouldShow ? 'flex' : 'none')};
+`
+
+const AddIconButtonContainer = styled.div<AddIconButtonContainerProps>`
+    display: ${(props) => (props.shouldShow ? 'none' : 'flex')};
+`
+
+const AddIconButtonText = styled.h1`
+  font-size: 1.8rem;
+  margin-left: 1rem;
+  font-weight: normal;
 `
